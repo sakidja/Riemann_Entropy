@@ -45,7 +45,6 @@ only when the evolution is unitary.
 | `figures/` | The figures (PNG and PDF). |
 | `results/ri_campaign4_60873848.out`, `results/ri_lpair_results.json` | Output of the fourth campaign (job 60873848). |
 | `results/ri_campaign5_60881952.out`, `results/ri_figdata_results.json`, `results/ri_figdata_arrays.npz` | Output of the fifth campaign (job 60881952). |
-| `paper/` | The paper (Word). |
 
 ## Where each table and figure comes from
 
