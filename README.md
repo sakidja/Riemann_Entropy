@@ -4,6 +4,8 @@ Code and results for the paper by Ridwan Sakidja (Missouri State University),
 "The Riemann Hypothesis as the Avoidance of an Information Entropy Collapse:
 the Riemann zeros as the discarded second moment of the primes" (November 2026).
 
+Preprint: https://doi.org/10.5281/zenodo.24019211
+
 The Riemann hypothesis as a closed quantum system: the entropy over the zeros is conserved
 only when the evolution is unitary.
 
