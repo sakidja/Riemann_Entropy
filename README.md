@@ -138,8 +138,8 @@ https://www-users.cse.umn.edu/~odlyzko/zeta_tables
 ## Acknowledgements
 
 This research used resources of the National Energy Research Scientific Computing Center (NERSC),
-a U.S. Department of Energy Office of Science User Facility, under allocation m4675 as part of the
-QIS@Perlmutter benchmarking program.
+a U.S. Department of Energy Office of Science User Facility, under allocation m4675 (QIS@Perlmutter)
+as a part of a benchmarking test.
 
 AI (LLM) assistance (Claude, Anthropic) was used in preparing code and text. The framework,
 calculations and analysis are the author's, and the author takes full responsibility for the
