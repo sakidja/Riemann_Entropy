@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this code or these results, please cite the paper."
+title: "The Riemann Hypothesis as the Avoidance of an Information Entropy Collapse"
+authors:
+  - family-names: Sakidja
+    given-names: Ridwan
+    affiliation: "Department of Physics, Astronomy and Materials Science, Missouri State University"
+date-released: 2026-11-06
+license: MIT
+preferred-citation:
+  type: article
+  title: "The Riemann Hypothesis as the Avoidance of an Information Entropy Collapse"
+  authors:
+    - family-names: Sakidja
+      given-names: Ridwan
+  year: 2026
+  doi: 10.5281/zenodo.24019211
+  url: "https://doi.org/10.5281/zenodo.24019211"
