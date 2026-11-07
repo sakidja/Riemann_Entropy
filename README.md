@@ -4,7 +4,7 @@ Code and results for the paper by Ridwan Sakidja (Missouri State University),
 "The Riemann Hypothesis as the Avoidance of an Information Entropy Collapse:
 the Riemann zeros as the discarded second moment of the primes" (November 2026).
 
-Preprint: https://doi.org/10.5281/zenodo.24019211
+Preprint: https://doi.org/10.5281/zenodo.24045182 (version 1b); version 1 is https://doi.org/10.5281/zenodo.24019211. Version 1b adds Section 8.3, the symmetry lifted: the zeros returned from the primes alone, with no zero and no functional equation as input (`ri_emerge.py`, `ri_mirror.py`, job 60966291).
 
 The Riemann hypothesis as a closed quantum system: the entropy over the zeros is conserved
 only when the evolution is unitary.
@@ -44,6 +44,10 @@ only when the evolution is unitary.
 | `scripts/ri_paircorr.py` | The pair correlation of the first 100,000 zeros, measured in bins of the separation, against the unitary class (the same function as free fermions in one dimension) and against no stiffness. Reads `zeros1`. Writes `ri_paircorr_results.json` and the figure `fig_paircorr`. |
 | `scripts/submit_campaign5.sh` | Slurm submit file for the fifth campaign: `qtest1.py`, `force.py`, `ri_figdata.py`, `ri_derived.py`, `make_figures.py`. |
 | `scripts/make_figures.py` | Draws Figures 1, 3 and 7 to 11 (files `fig1` to `fig7`). It only reads result files; nothing is computed in it. |
+| `scripts/ri_emerge.py` | Version 1b, Section 8.3: the zeros from the primes alone, with δ free. Smooths ψ(x) with a Gaussian in log x, which the explicit formula turns into an exact sum of modes e^((δ + iγ)t)/ρ, and extracts the modes by the matrix pencil method (Hua and Sarkar 1990); the same for the two components mod 5 and for the Davenport and Heilbronn series. The single window below γ = 500 gives Tables 21 and 22 and the entropy; the strip to 2,000 (2,600 for zeta) is taken in bands every 100 for Figures 14 and 16. Writes `ri_emerge_results.json`, `fig_v1b_fig7`, `fig_v1b_fig8`. |
+| `scripts/ri_mirror.py` | The mirror test on the returned modes (Figures 15 and 17): each mode against its image under Re s → 1 − Re s, and the mirror gap 2\|δ\| of every mode on a log axis. Reads `ri_emerge_results.json` only. |
+| `scripts/submit_emerge.sh` | Slurm submit file for the emergence run: `ri_emerge.py 1e9 1e8 500 2000` then `ri_mirror.py`. |
+| `results/ri_emerge_60966291.out`, `results/ri_emerge_results.json` | Output of the emergence run (job 60966291), including the mirror test. |
 | `figures/` | The figures (PNG and PDF). |
 | `results/ri_campaign4_60873848.out`, `results/ri_lpair_results.json` | Output of the fourth campaign (job 60873848). |
 | `results/ri_campaign5_60881952.out`, `results/ri_figdata_results.json`, `results/ri_figdata_arrays.npz` | Output of the fifth campaign (job 60881952). |
@@ -75,7 +79,9 @@ Every number in a table and every point in a figure is printed or written by a s
 | Table 18, Davenport and Heilbronn | `ri_dh.py`, part B | `ri_campaign3_60869745.out` |
 | Table 19, component and combination | `ri_lpair.py`, part B | `ri_campaign4_60873848.out` |
 | Table 20, the entropy split by the grouping rule | `ri_layers.py`, part B | `ri_layers.out` |
-| Tables 21 to 23 | none: they quote the tables above and the cited work | |
+| Table 21, the modes returned with the symmetry lifted, γ < 500 | `ri_emerge.py`, sections 1 to 5 | `ri_emerge_60966291.out` |
+| Table 22, the doublets returned for the Davenport and Heilbronn function | `ri_emerge.py`, section 5 | `ri_emerge_60966291.out` |
+| Tables 23 to 25 | none: they quote the tables above and the cited work | |
 | Means, ratios and counts quoted in the text | `ri_derived.py` | `ri_campaign5_60881952.out` |
 | Figure 1 | `make_figures.py` | `ri_campaign_results.json`, `ri_campaign2_results.json`, `ri_dh_results.json` |
 | Figure 3 | `make_figures.py` | `ri_probe_height_results.json` |
@@ -89,6 +95,8 @@ Every number in a table and every point in a figure is printed or written by a s
 | Section 5.1, Figure 2: the pair correlation of the zeros | `ri_paircorr.py` | `ri_paircorr.out`, `ri_paircorr_results.json` (run without a job, 6 November 2026); it reads `zeros1` |
 | Section 7, Figure 4: the circuit diagram | `ri_circuit_fig.py` | none: a schematic |
 | Section 8.2, Figure 12: the terms, the rate of growth, where the lead passes | `ri_steps.py` | `ri_steps.out`, `ri_steps_results.json` (run without a job, 5 November 2026) |
+| Section 8.3, Figures 14 and 16: Figures 7 and 8 repeated with the returned modes on top | `ri_emerge.py`, section 8 | `ri_emerge_results.json` (job 60966291); reads `ri_dh_results.json`, `ri_figdata_results.json`, `zeros1` |
+| Section 8.3, Figures 15 and 17: the mirror test | `ri_mirror.py` | `ri_emerge_results.json` (job 60966291) |
 
 ## How to reproduce
 
@@ -113,6 +121,8 @@ python ri_register_figs.py   # Figures 5 and 6; needs the job outputs of campaig
 python ri_circuit_fig.py      # Figure 4, the circuit diagram; needs nothing
 python ri_paircorr.py         # Figure 2, the pair correlation of Section 5.1; needs zeros1
 python ri_steps.py         # Figure 12; needs the result files of ri_dh.py and ri_lpair.py
+python ri_emerge.py 1e9 1e8 500 2000   # version 1b, Section 8.3; about 1.5 hours and 3 GB; needs zeros1, ri_dh_results.json, ri_figdata_results.json
+python ri_mirror.py                     # Figures 15 and 17; reads ri_emerge_results.json
 ```
 
 The quantum circuits are evaluated by statevector simulation in Qiskit (tested with 2.6.1), which is exact at this size,
@@ -129,6 +139,7 @@ and the shots are sampled from the exact probabilities.
 | Stiffness of the harmonic well, measured over predicted, zeros 1 to 300 | 0.994 to 1.010 |
 | Entropy over modes, 256 zeros, one mode off the line by 0.20 | 5.48, 4.38, 1.33, 0.18 at log x = 6, 12, 18, 24 (maximum 5.545) |
 | Entropy over modes of the Davenport and Heilbronn function, windows of log x from 2 to 100 | 3.01, largest 3.20, down to 0.092 (zeta function: 4.039 in every window) |
+| Version 1b: zeros returned from the primes alone, δ free, no zero and no functional equation as input | zeta: 269 of 269 below 500 and 2,080 of 2,080 below 2,600 on the line, largest \|δ\| 2.1 × 10^−9 (single window) and 4.2 × 10^−10 (bands), γ to 5 × 10^−10; mirror gap 2\|δ\| within 10^−11.9 to 10^−10.7 for every mode. Davenport and Heilbronn from its series alone: 2,029 modes below 2,000, 1,861 on the line and 84 doublets ±δ at the 84 pairs of Figure 7, γ to six digits and δ to five; the functional equation returned, not assumed. Figure 8 repeated from the returned modes: on the given curves to 10^−10 (zeta) and 6 × 10^−6 (DH). |
 
 
 ## Data
@@ -177,6 +188,15 @@ The Davenport and Heilbronn function is a fixed combination of two Dirichlet L f
 - From the primes alone (no zeros): the same variance within 1.4 percent, correlation 0.996 to 0.998.
 - Pair statistics of the components: mean squared deviation 0.87 against the sum over their primes, 59 against the unitary ramp.
 
+## Sixth campaign, version 1b (job 60966291)
+
+- `ri_emerge.py 1e9 1e8 500 2000` and `ri_mirror.py`. Input: Λ(n) from the sieve to 10^9 for zeta and the two components; the coefficients of −f′/f to 10^8 by Dirichlet inversion for the Davenport and Heilbronn series. No zero and no functional equation enter; the zeros of Odlyzko's table are used only for the floor run (the estimator fed the table with δ = 0) and for the comparisons after the fact.
+- Zeta: 269 modes below 500, 269 of 269 on the line, largest \|δ\| 2.1 × 10^−9 against a floor of 9.7 × 10^−10; every γ to 5 × 10^−10 of the table; weights 1/\|ρ\| to six digits at the low zeros and three at 500; one pole at every height. Components mod 5: 794 of 794 each.
+- Davenport and Heilbronn: 397 modes below 500, 377 single poles on the line and 10 doublets +δ, −δ at the same γ with the same weight, at the ten zeros off the line of Section 8 to six digits in γ and five in δ.
+- The strip in bands every 100: zeta 2,080 modes below 2,600, all on the line, largest \|δ\| 4.2 × 10^−10; DH 2,029 modes below 2,000, 1,861 single and 84 doublets, 84 of 84 at the pairs of Figure 7.
+- Figure 8 repeated from the returned modes: largest difference from the given curves 9.9 × 10^−11 (zeta) and 6.3 × 10^−6 (DH).
+- Mirror test: zeta, every one of the 2,080 modes its own image, gaps 10^−11.9 to 10^−10.7 at one sigma, largest 8.3 × 10^−10; DH, 1,861 modes in the band 10^−7.6 to 10^−6.3 and the 168 doublet members six decades above it.
+
 ## Figures
 
 `python scripts/make_figures.py` reads `results/` and writes `figures/` (PNG at 300 dpi and PDF). It needs numpy and matplotlib.
@@ -198,5 +218,9 @@ The file names are the ones the scripts write. The figure number in the paper is
 | `fig11_register_entropy` | 6. One mode off the line on the register: entropy and success probability against the entropy theorem |
 | `fig_circuit_hadamard` | 4. The Hadamard test circuit of the quantum readout |
 | `fig_paircorr` | 2. The pair correlation of the first 100,000 zeros against the unitary class (free fermions) and no stiffness |
+| `fig_v1b_fig7` | 14. Figure 7 repeated with the symmetry lifted: the returned modes as crosses (version 1b) |
+| `fig_mirror_zeta` | 15. The mirror test for the zeta function, parts A and B (version 1b) |
+| `fig_v1b_fig8` | 16. Figure 8 repeated with the symmetry lifted: the entropy over the returned modes dashed (version 1b) |
+| `fig_mirror_dh` | 17. The mirror test for the Davenport and Heilbronn function, parts A and B (version 1b) |
 
-Figures 1, 3 and 7 to 11 are drawn by `make_figures.py` from the result files alone. Figures 12 and 13 are drawn by `ri_steps.py` and `ri_layers.py`, each from the result file it has just written.
+Figures 1, 3 and 7 to 11 are drawn by `make_figures.py` from the result files alone. Figures 12 and 13 are drawn by `ri_steps.py` and `ri_layers.py`, each from the result file it has just written. Figures 14 and 16 are drawn by `ri_emerge.py` with the code of `make_figures.py` for Figures 7 and 8, and Figures 15 and 17 by `ri_mirror.py` from `ri_emerge_results.json`.

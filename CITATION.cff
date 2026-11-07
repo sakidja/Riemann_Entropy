@@ -5,7 +5,7 @@ authors:
   - family-names: Sakidja
     given-names: Ridwan
     affiliation: "Department of Physics, Astronomy and Materials Science, Missouri State University"
-date-released: 2026-11-06
+date-released: 2026-11-07
 license: MIT
 preferred-citation:
   type: article
@@ -14,5 +14,5 @@ preferred-citation:
     - family-names: Sakidja
       given-names: Ridwan
   year: 2026
-  doi: 10.5281/zenodo.24019211
-  url: "https://doi.org/10.5281/zenodo.24019211"
+  doi: 10.5281/zenodo.24045182
+  url: "https://doi.org/10.5281/zenodo.24045182"
